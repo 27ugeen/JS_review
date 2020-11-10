@@ -54,28 +54,53 @@ const requestURL = 'https://jsonplaceholder.typicode.com/users'
 
 //===============Fetch===================
 
-const sendRequest = (method, url, body = null) => {
+// const sendRequest = (method, url, body = null) => {
+//     const headers = {
+//         'Content-Type': 'application/json'
+//     }
+//
+//     const bodyPost = body !== null ? JSON.stringify(body) : null
+//
+//     return fetch(url, {
+//         method,
+//         body: bodyPost,
+//         headers
+//     })
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json()
+//             }
+//             return response.json()
+//                 .then(error => {
+//                     const e = new Error('Something went wrong...')
+//                     e.data = error
+//                     throw e
+//                 })
+//         })
+// }
+
+//===async===
+
+const sendRequest = async (method, url, body = null) => {
     const headers = {
         'Content-Type': 'application/json'
     }
-
     const bodyPost = body !== null ? JSON.stringify(body) : null
 
-    return fetch(url, {
-        method,
-        body: bodyPost,
-        headers
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            }
-            return response.json().then(error => {
-                const e = new Error('Something went wrong...')
-                e.data = error
-                throw e
-            })
+    try {
+        const response = await fetch(url, {
+            method,
+            body: bodyPost,
+            headers
         })
+        const data = await response.json()
+        return data
+
+    } catch (error) {
+        const e = new Error('Something went wrong...')
+        e.data = error
+        throw e
+    }
 }
 
 sendRequest('GET', requestURL)
